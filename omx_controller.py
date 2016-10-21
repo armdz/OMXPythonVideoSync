@@ -20,6 +20,7 @@ if platform.system() == "Linux":
 	OMXPLAYER_DBUS_ADDR='/tmp/omxplayerdbus.%s' % getpass.getuser()
 
 class OMXController():
+
 	def __init__(self):
 		if im_raspi:
 			print "* OMX INITED *"	
@@ -32,10 +33,10 @@ class OMXController():
 			done,retry=0,0
 			while done==0:
 			    try:
-			    	bus = dbus.bus.BusConnection(open(OMXPLAYER_DBUS_ADDR).readlines()[0].rstrip())
+			    	self.bus = dbus.bus.BusConnection(open(OMXPLAYER_DBUS_ADDR).readlines()[0].rstrip())
 			        object = bus.get_object('org.mpris.MediaPlayer2.omxplayer','/org/mpris/MediaPlayer2', introspect=False)
-			        dbusIfaceProp = dbus.Interface(object,'org.freedesktop.DBus.Properties')
-			        dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
+			        self.dbusIfaceProp = dbus.Interface(object,'org.freedesktop.DBus.Properties')
+			        self.dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
 			        print "* OMX CACHEADO *"
 			        done=1
 			    except:
@@ -52,9 +53,9 @@ class OMXController():
 
 
 	def seek(self,seconds):
-		dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
+		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause(self):
-		dbusIfaceKey.Action(dbus.Int32("16"))
+		self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def kill(self):
 		if im_raspi:
 			try:
