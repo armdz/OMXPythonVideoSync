@@ -89,18 +89,23 @@ class VideoSync():
 				self.sock.sendto("hello", (self.master_ip, MASTER_INPUT_PORT))
 				time.sleep(MSG_HELLO_TIMER)
 			if self.mode == MODE_READY:
-				if(data == "play"):
+				if data == "play":
 					data = ""
 					self.omx_controller.play()
+				elif data == "rewind":
+					data = ""
+					self.omx_controller.rewind()
 
 
 	def as_master(self):
 		while True:
 			if(self.mode == MODE_READY):
 				try:
-					key_input=raw_input('Input:')
+					key_input=raw_input('key input :')
 					if key_input == 'p':
 						self.send_play()
+					elif key_input == 'r':
+						self.send_rewind()
 				except ValueError:
 					pass
 			if self.mode == MASTER_MODE_WAITING_CLIENTS:
@@ -122,6 +127,9 @@ class VideoSync():
 		"""for client in client_list:
 			print(client)
 			self.sock.sendto("play", (str(client[0]), int(client[1])))"""
+	def send_rewind(self):
+		print " * ENVIO REWIND *"
+		self.sock.sendto("rewind", ("255.255.255.255", SLAVE_INPUT_PORT))
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
