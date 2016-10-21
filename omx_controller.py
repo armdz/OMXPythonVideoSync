@@ -51,8 +51,9 @@ class OMXController():
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
-		self.pause()
-		self.seek(0)
+		self.dbusIfaceKey.Stop()
+		#self.pause()
+		#self.seek(0)
 	def play(self):
 		print "* RECIBO PLAY *"
 		self.dbusIfaceKey.Action(dbus.Int32("16"))

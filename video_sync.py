@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+#http://pythonhackers.com/p/popcornmix/omxplayer
 import thread
 import threading
 import time
