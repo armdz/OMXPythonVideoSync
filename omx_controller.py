@@ -5,6 +5,10 @@ import os
 import signal
 from subprocess import Popen
 
+# matar socket fuser -k -n tcp 37
+# matar proceso pkill omxplayer
+# o killall omxplayer
+
 VIDEO_FILE="video.mp4"
 im_raspi = False
 
@@ -48,9 +52,9 @@ class OMXController():
 
 
 	def seek(self,seconds):
-		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
+		dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause(self):
-		self.dbusIfaceKey.Action(dbus.Int32("16"))
+		dbusIfaceKey.Action(dbus.Int32("16"))
 	def kill(self):
 		if im_raspi:
 			try:
