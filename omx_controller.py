@@ -52,9 +52,8 @@ class OMXController():
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
-		for x in range(0, 20):
-			self.seek(0)
-		time.sleep(.1)
+		self.seek(0)
+		time.sleep(.4)
 		self.pause()
 	def play(self):
 		print "* RECIBO PLAY *"
