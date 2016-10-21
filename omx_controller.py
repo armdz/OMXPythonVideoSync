@@ -47,6 +47,7 @@ class OMXController():
 			            print "* ERRROR CACHEANDO OMX *"
 			            raise SystemExit
 			#incio el video en 0 y con pausa y espero play
+			self.seek(0)
 			self.pause()
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
