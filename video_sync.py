@@ -119,9 +119,13 @@ class VideoSync():
 	def send_play(self):	
 		print " * ENVIO PLAY *"
 		self.sock.sendto("play", ("255.255.255.255", SLAVE_INPUT_PORT))
+		#	duplicar acciones para master
+		self.omx_controller.play()	
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
 		self.sock.sendto("rewind", ("255.255.255.255", SLAVE_INPUT_PORT))
+		#	duplicar acciones para master
+		self.omx_controller.rewind()
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
