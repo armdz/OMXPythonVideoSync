@@ -53,7 +53,7 @@ class OMXController():
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
 		self.seek(0)
-		time.sleep(.5)
+		time.sleep(.1)
 		self.pause()
 	def play(self):
 		print "* RECIBO PLAY *"
