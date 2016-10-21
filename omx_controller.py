@@ -33,6 +33,7 @@ class OMXController():
 			        print "* OMX CACHEADO *"
 			        done=1
 			    except:
+			    	print "ERROR"
 			        retry+=1
 			        time.sleep(1)
 			        if retry >= 50:
