@@ -90,12 +90,20 @@ class VideoSync():
 				time.sleep(MSG_HELLO_TIMER)
 			if self.mode == MODE_READY:
 				if(data == "play"):
+					data = ""
 					print "PLAYYYYYYYYYYYYY"
 					self.omx_controller.play()
 
 
 	def as_master(self):
 		while True:
+			if(self.mode == MODE_READY):
+				try:
+					key_input=raw_input('Input:')
+					if key_input == 'p':
+						self.send_play()
+				except ValueError:
+					pass
 			if self.mode == MASTER_MODE_WAITING_CLIENTS:
 				try:
 					data, addr = self.sock.recvfrom(1024)
@@ -105,19 +113,24 @@ class VideoSync():
 						self.connected_clients += 1
 						if self.connected_clients == self.total_clients:
 							self.mode = MODE_READY
-							print "* TODOS LOS CUADROS LISTOS *"
-							time.sleep(10)
-							print " * ENVIO PLAY *"
-							self.sock.sendto("play", ("255.255.255.0", SLAVE_INPUT_PORT))
+							print "* TODOS LOS CUADROS LISTOS *"	
 				except socket_error as serr:
 					#no hay data
 					pass
+	def send_play(self):	
+		print " * ENVIO PLAY *"
+		for client in client_list:
+			print(client)
+			self.sock.sendto("play", (str(client[0]), int(client[1])))
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
 	#	conexion	#
 	def init_socket(self):
 		sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,0)
+		if self.master:
+			sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 		sock.bind(('0.0.0.0',self.udp_port))
 		sock.setblocking(0)
 		return sock
