@@ -90,7 +90,8 @@ class VideoSync():
 				time.sleep(MSG_HELLO_TIMER)
 			if self.mode == MODE_READY:
 				if(data == "play"):
-					print "PLAYYYYYYYYYYYYY"	
+					print "PLAYYYYYYYYYYYYY"
+					self.omx_controller.play()
 
 
 	def as_master(self):
@@ -105,6 +106,9 @@ class VideoSync():
 						if self.connected_clients == self.total_clients:
 							self.mode = MODE_READY
 							print "* TODOS LOS CUADROS LISTOS *"
+							time.sleep(10)
+							print " * ENVIO PLAY *"
+							self.sock.sendto("play", ("255.255.255.0", SLAVE_INPUT_PORT))
 				except socket_error as serr:
 					#no hay data
 					pass
