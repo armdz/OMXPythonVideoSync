@@ -59,7 +59,7 @@ class OMXController():
 		print "* RECIBO PLAY *"
 		self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def seek(self,seconds):
-		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), 0)
+		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause(self):
 		self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def kill(self):
