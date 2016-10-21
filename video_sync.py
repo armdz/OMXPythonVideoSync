@@ -1,12 +1,13 @@
 #!/usr/bin/env python2.7
 import getpass
 """import dbus, time"""
+from omx_controller import OMXController
 import thread
 import threading
 import time
 import socket
 from socket import error as socket_error
-import sys
+import sys,platform
 from subprocess import Popen
 
 # constantes
@@ -27,8 +28,12 @@ connected_clients = 0
 master_ip = ""
 client_list = []
 
+
 class VideoSync():
 	def __init__(self):
+
+		print platform.system()
+
 		self.master = False
 		arg_len = len(sys.argv)
 		if arg_len < 3:
@@ -48,6 +53,7 @@ class VideoSync():
 
 		self.sock = self.init_socket()
 		self.connected_clients = 0
+		self.omx_controller = OMXController()
 
 	def run(self):
 		print 	"**************************************"
