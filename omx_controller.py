@@ -11,6 +11,7 @@ from subprocess import Popen
 
 VIDEO_FILE="video.mp4"
 im_raspi = False
+paused = False
 
 if platform.system() == "Linux":
 	import dbus
@@ -51,9 +52,10 @@ class OMXController():
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
-		self.pause()
 		time.sleep(.1)
 		self.seek(0)
+		time.sleep(.1)
+		self.pause()
 	def play(self):
 		print "* RECIBO PLAY *"
 		self.dbusIfaceKey.Action(dbus.Int32("16"))
