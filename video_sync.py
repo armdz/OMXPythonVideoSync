@@ -91,7 +91,6 @@ class VideoSync():
 			if self.mode == MODE_READY:
 				if(data == "play"):
 					data = ""
-					print "PLAYYYYYYYYYYYYY"
 					self.omx_controller.play()
 
 
@@ -119,9 +118,10 @@ class VideoSync():
 					pass
 	def send_play(self):	
 		print " * ENVIO PLAY *"
-		for client in client_list:
+		self.sock.sendto("play", ("255.255.255.255", SLAVE_INPUT_PORT))
+		"""for client in client_list:
 			print(client)
-			self.sock.sendto("play", (str(client[0]), int(client[1])))
+			self.sock.sendto("play", (str(client[0]), int(client[1])))"""
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()

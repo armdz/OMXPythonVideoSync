@@ -47,12 +47,14 @@ class OMXController():
 			            print "* ERRROR CACHEANDO OMX *"
 			            raise SystemExit
 			#incio el video en 0 y con pausa y espero play
-			self.seek(0)
-			self.pause()
+			self.rewind()
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
-
+	def rewind(self):
+		self.seek(0)
+		self.pause()
 	def play(self):
+		print "* RECIBO PLAY *"
 		self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def seek(self,seconds):
 		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
