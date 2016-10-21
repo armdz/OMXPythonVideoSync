@@ -31,11 +31,6 @@ client_list = []
 
 class VideoSync():
 	def __init__(self):
-		# cierro los puertos antes
-		"""if platform.system() == "Linux":
-			cmd = "fuser -k -n udp 12000 && fuser -k -n udp 13000"
-			Popen([cmd], shell=True)"""
-
 		self.master = False
 		arg_len = len(sys.argv)
 		if arg_len < 3:
@@ -96,7 +91,6 @@ class VideoSync():
 					data = ""
 					self.omx_controller.rewind()
 
-
 	def as_master(self):
 		while True:
 			if(self.mode == MODE_READY):
@@ -113,6 +107,7 @@ class VideoSync():
 					data, addr = self.sock.recvfrom(1024)
 					client_list.append(addr)
 					if(data == "hello"):
+						print " * NUEVO CLIENTE",addr
 						self.sock.sendto("welcome", (str(addr[0]), int(addr[1])))
 						self.connected_clients += 1
 						if self.connected_clients == self.total_clients:
@@ -124,9 +119,6 @@ class VideoSync():
 	def send_play(self):	
 		print " * ENVIO PLAY *"
 		self.sock.sendto("play", ("255.255.255.255", SLAVE_INPUT_PORT))
-		"""for client in client_list:
-			print(client)
-			self.sock.sendto("play", (str(client[0]), int(client[1])))"""
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
 		self.sock.sendto("rewind", ("255.255.255.255", SLAVE_INPUT_PORT))
@@ -142,7 +134,6 @@ class VideoSync():
 		sock.bind(('0.0.0.0',self.udp_port))
 		sock.setblocking(0)
 		return sock
-
 
 def exit_handler():
 	video_sync.exit()
