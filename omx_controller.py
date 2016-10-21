@@ -52,16 +52,21 @@ class OMXController():
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
-		self.seek(0)
-		time.sleep(.4)
-		self.pause()
+		print "* RECIBO REWIND *"
+		if im_raspi:
+			self.seek(0)
+			time.sleep(.4)
+			self.pause()
 	def play(self):
 		print "* RECIBO PLAY *"
-		self.dbusIfaceKey.Action(dbus.Int32("16"))
+		if im_raspi:
+			self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def seek(self,seconds):
-		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
+		if im_raspi:
+			self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause(self):
-		self.dbusIfaceKey.Action(dbus.Int32("16"))
+		if im_raspi:
+			self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def kill(self):
 		if im_raspi:
 			try:
