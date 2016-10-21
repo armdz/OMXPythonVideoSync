@@ -57,7 +57,7 @@ class OMXController():
 		self.seek(0)
 		time.sleep(1)
 		self.pause()
-		time.sleep(1)
+		time.sleep(.1)
 		self.pause()		
 	def play(self):
 		print "* RECIBO PLAY *"
