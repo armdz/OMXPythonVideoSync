@@ -1,14 +1,13 @@
 #!/usr/bin/env python2.7
 import getpass
-"""import dbus, time"""
-from omx_controller import OMXController
 import thread
 import threading
 import time
+import sys,platform
 import socket
 from socket import error as socket_error
-import sys,platform
 from subprocess import Popen
+from omx_controller import OMXController
 
 # constantes
 MODE_INIT = -1
@@ -20,6 +19,7 @@ SLAVE_INPUT_PORT = 12000
 MASTER_INPUT_PORT = 13000
 MSG_HELLO_TIMER = 2	#cada cuando mando el mensaje
 
+im_raspi = False
 master = False
 udp_port = 0
 mode = MODE_INIT
@@ -32,7 +32,8 @@ client_list = []
 class VideoSync():
 	def __init__(self):
 
-		print platform.system()
+		if platform.system() == "Linux":
+			im_raspi = True
 
 		self.master = False
 		arg_len = len(sys.argv)
