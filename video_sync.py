@@ -31,6 +31,11 @@ client_list = []
 
 class VideoSync():
 	def __init__(self):
+		# cierro los puertos antes
+		if platform.system() == "Linux":
+			cmd = "fuser -k -n udp 12000 && fuser -k -n udp 13000"
+			Popen([cmd], shell=True)
+
 		self.master = False
 		arg_len = len(sys.argv)
 		if arg_len < 3:
