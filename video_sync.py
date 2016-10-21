@@ -118,18 +118,24 @@ class VideoSync():
 					pass
 	def send_play(self):	
 		print " * ENVIO PLAY *"
-		self.sock.sendto("play", ("255.255.255.255", SLAVE_INPUT_PORT))
+		self.send("play")
+		#self.sock.sendto("play", ("255.255.255.255", SLAVE_INPUT_PORT))
 		#	duplicar acciones para master
 		self.omx_controller.play()	
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
-		self.sock.sendto("rewind", ("255.255.255.255", SLAVE_INPUT_PORT))
+		self.send("rewind")
+		#self.sock.sendto("rewind", ("255.255.255.255", SLAVE_INPUT_PORT))
 		#	duplicar acciones para master
 		self.omx_controller.rewind()
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
 	#	conexion	#
+	def send(self,msg):
+		for client in client_list:
+			self.sock.sendto(msg, client)
+
 	def init_socket(self):
 		sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,0)
 		if self.master:

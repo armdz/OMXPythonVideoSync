@@ -48,7 +48,8 @@ class OMXController():
 			            print "* ERRROR CACHEANDO OMX *"
 			            raise SystemExit
 			#incio el video en 0 y con pausa y espero play
-			self.rewind()
+			#self.rewind()
+			self.pause()
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
@@ -66,7 +67,8 @@ class OMXController():
 			self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause(self):
 		if im_raspi:
-			self.dbusIfaceKey.Action(dbus.Int32("16"))
+			self.dbusIfaceKey.Pause()
+			#self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def kill(self):
 		if im_raspi:
 			try:
