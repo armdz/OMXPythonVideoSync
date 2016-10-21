@@ -9,7 +9,7 @@ from subprocess import Popen
 # matar proceso pkill omxplayer
 # o killall omxplayer
 
-VIDEO_FILE="video.mp4"
+VIDEO_FILE="video.mov"
 im_raspi = False
 paused = False
 
