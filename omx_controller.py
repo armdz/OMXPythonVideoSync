@@ -38,6 +38,7 @@ class OMXController():
 			        object = self.bus.get_object('org.mpris.MediaPlayer2.omxplayer','/org/mpris/MediaPlayer2', introspect=False)
 			        self.dbusIfaceProp = dbus.Interface(object,'org.freedesktop.DBus.Properties')
 			        self.dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
+			        self.dbusIfaceKey.Pause()
 			        print "* OMX CACHEADO *"
 			        done=1
 			    except:
@@ -49,7 +50,7 @@ class OMXController():
 			            raise SystemExit
 			#incio el video en 0 y con pausa y espero play
 			#self.rewind()
-			self.pause()
+
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
