@@ -101,7 +101,7 @@ class VideoSync():
 		while True:
 			if(self.mode == MODE_READY):
 				try:
-					key_input=raw_input('key input :')
+					key_input=raw_input(' > key input :')
 					if key_input == 'p':
 						self.send_play()
 					elif key_input == 'r':
