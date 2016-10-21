@@ -1,5 +1,4 @@
 #!/usr/bin/env python2.7
-import getpass
 import thread
 import threading
 import time
@@ -75,6 +74,7 @@ class VideoSync():
 				data,addr = self.sock.recvfrom(1024)
 				if data == "welcome":
 					self.mode = MODE_READY
+					self.omx_controller.ready()
 					print "* ESTOY LISTO *"
 			except socket_error as serr:
 				#no hay data
