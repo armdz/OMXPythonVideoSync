@@ -47,9 +47,9 @@ class OMXController():
 			print "* OMX: READY, ESPERANDO PLAY *"
 
 
-	def seek(seconds):
+	def seek(self,seconds):
 		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
-	def pause():
+	def pause(self):
 		self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def kill(self):
 		if im_raspi:
