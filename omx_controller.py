@@ -1,4 +1,5 @@
 import platform
+import getpass
 from subprocess import Popen
 
 VIDEO_FILE="video.mp4"
