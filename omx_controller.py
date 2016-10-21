@@ -29,7 +29,7 @@ class OMXController():
 			print "* OMX: NO ESTOY CORRIENDO EN RASPI , SOLO TIRO PRINT :O *"
 	def ready(self):
 		if im_raspi:
-			cmd = "omxplayer --win '0 0 1280 720' %s" %(VIDEO_FILE)
+			cmd = "omxplayer --no-osd %s" %(VIDEO_FILE)
 			Popen([cmd], shell=True)
 			done,retry=0,0
 			while done==0:
@@ -53,7 +53,7 @@ class OMXController():
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def rewind(self):
 		self.seek(0)
-		time.sleep(.5)
+		time.sleep(.1)
 		self.pause()
 	def play(self):
 		print "* RECIBO PLAY *"
