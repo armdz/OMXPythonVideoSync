@@ -26,10 +26,10 @@ class OMXController():
 			done,retry=0,0
 			while done==0:
 			    try:
-			    	self.bus = dbus.bus.BusConnection(open(OMXPLAYER_DBUS_ADDR).readlines()[0].rstrip())
+			    	bus = dbus.bus.BusConnection(open(OMXPLAYER_DBUS_ADDR).readlines()[0].rstrip())
 			        object = bus.get_object('org.mpris.MediaPlayer2.omxplayer','/org/mpris/MediaPlayer2', introspect=False)
-			        self.dbusIfaceProp = dbus.Interface(object,'org.freedesktop.DBus.Properties')
-			        self.dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
+			        dbusIfaceProp = dbus.Interface(object,'org.freedesktop.DBus.Properties')
+			        dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
 			        print "* OMX CACHEADO *"
 			        done=1
 			    except:
