@@ -31,10 +31,6 @@ client_list = []
 
 class VideoSync():
 	def __init__(self):
-
-		if platform.system() == "Linux":
-			im_raspi = True
-
 		self.master = False
 		arg_len = len(sys.argv)
 		if arg_len < 3:
@@ -54,7 +50,6 @@ class VideoSync():
 
 		self.sock = self.init_socket()
 		self.connected_clients = 0
-		self.omx_controller = OMXController()
 
 	def run(self):
 		print 	"**************************************"
@@ -64,7 +59,7 @@ class VideoSync():
 		else:
 			print	"Slave"
 		print 	"**************************************"
-
+		self.omx_controller = OMXController()
 		if self.master:
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
