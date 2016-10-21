@@ -4,6 +4,8 @@ import threading
 import time
 import sys,platform
 import socket
+import atexit
+
 from socket import error as socket_error
 from subprocess import Popen
 from omx_controller import OMXController
@@ -26,7 +28,6 @@ total_clients = 1
 connected_clients = 0
 master_ip = ""
 client_list = []
-
 
 class VideoSync():
 	def __init__(self):
@@ -102,7 +103,9 @@ class VideoSync():
 				except socket_error as serr:
 					#no hay data
 					pass
-			
+	def exit(self):
+		self.sock.close()
+		self.omx_controller.kill()
 	#	conexion	#
 	def init_socket(self):
 		sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,0)
@@ -110,5 +113,12 @@ class VideoSync():
 		sock.setblocking(0)
 		return sock
 
+
+def exit_handler():
+	video_sync.exit()
+
+atexit.register(exit_handler)
+
 if __name__=='__main__':
-    VideoSync().run();
+	video_sync = VideoSync()
+	video_sync.run()

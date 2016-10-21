@@ -1,6 +1,8 @@
 import platform
 import getpass
 import time
+import os
+import signal
 from subprocess import Popen
 
 VIDEO_FILE="video.mp4"
@@ -50,3 +52,15 @@ class OMXController():
 		self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause():
 		self.dbusIfaceKey.Action(dbus.Int32("16"))
+	def kill(self):
+		if im_raspi:
+			try:
+				os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+			except:
+				pass
+			try:
+				self.process.wait()
+			except:
+				pass
+		else:
+			print "* CHAU * "
