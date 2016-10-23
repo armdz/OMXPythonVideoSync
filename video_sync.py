@@ -50,6 +50,11 @@ class VideoSync():
 
 		self.sock = self.init_socket()
 		self.connected_clients = 0
+	def connect():
+		while True:
+			self.sock.close()
+			try:
+				
 
 	def run(self):
 		print 	"**************************************"
