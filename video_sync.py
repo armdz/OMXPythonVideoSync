@@ -59,7 +59,7 @@ class VideoSync():
 			self.master_ip = str(sys.argv[2])	
 			self.tcp_port = MASTER_INPUT_PORT
 			self.im_connected = False
-			self.omx_controller.ready()
+			
 
 		self.ping_tick = time.clock()
 		self.connected_clients = 0
@@ -73,6 +73,7 @@ class VideoSync():
 			print	"Slave"
 		print 	"**************************************"
 		self.omx_controller = OMXController()
+		self.omx_controller.ready()
 		if self.master:
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
@@ -172,9 +173,9 @@ class VideoSync():
 	def init_socket(self):
 		sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		#sock.setblocking(0)
-		"""if self.master:
+		if self.master:
 			sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-			sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)"""
+			sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 		
 		if self.master:
 			print self.tcp_port
