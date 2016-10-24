@@ -142,7 +142,6 @@ class VideoSync():
 					self.send("rewind")
 
 
-
 	def send_play(self):	
 		print " * ENVIO PLAY *"
 		self.send("play")
@@ -186,6 +185,8 @@ class VideoSync():
 				sock.setblocking(0)
 				self.im_connected = True
 				print "* CONECTADO AL MASTER *"
+				self.omx_controller.ready()
+				print "* ESTOY LISTO *"
 			except socket.error,v:
 				self.im_connected = False
 				time.sleep(1)
