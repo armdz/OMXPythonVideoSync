@@ -105,28 +105,29 @@ class VideoSync():
 		print "* RUTINA DE CONEXION *"
 		while True:
 			if self.im_connected:
-				try:
-					data,addr = self.sock.recvfrom(1024)
-					if not data:
-						pass
-					else:
-						if data == "play":
-							self.omx_controller.play()
-						elif data == "pause":
-							self.omx_controller.pause()
-						elif data == "rewind":
-							self.omx_controller.rewind()
-				except socket.error, e:
-					pass
-				time_dif = math.floor(math.fabs(self.ping_tick-time.clock()))
-				if(time_dif > 5):
-					self.ping_tick = time.clock()
+				if self.rewinded:
 					try:
-						self.sock.send("estoy")
-					except:
-						print "* INTENTO AUTOCONECTAR *"
-						self.sock.close()
-						self.im_connected = False
+						data,addr = self.sock.recvfrom(1024)
+						if not data:
+							pass
+						else:
+							if data == "play":
+								self.omx_controller.play()
+							elif data == "pause":
+								self.omx_controller.pause()
+							elif data == "rewind":
+								self.omx_controller.rewind()
+					except socket.error, e:
+						pass
+					time_dif = math.floor(math.fabs(self.ping_tick-time.clock()))
+					if(time_dif > 5):
+						self.ping_tick = time.clock()
+						try:
+							self.sock.send("estoy")
+						except:
+							print "* INTENTO AUTOCONECTAR *"
+							self.sock.close()
+							self.im_connected = False
 			elif self.omx_controller.im_ready:
 				if not self.rewinded:
 					time.sleep(DELAY_INIT_TO_RW)
@@ -212,14 +213,14 @@ class VideoSync():
 				print "* Nueva conexion",address,len(self.client_list),"*"
 			except:
 				pass
-			if not self.shared_q.empty():
+			"""if not self.shared_q.empty():
 				input_char = self.shared_q.get()
 				if input_char == 's':
 					self.send_play()
 				elif input_char == 'p':
 					self.send_pause()
 				elif input_char == 'r':
-					self.send_rewind()
+					self.send_rewind()"""
 
 
 
@@ -282,7 +283,7 @@ class VideoSync():
 				sock.connect((self.master_ip,self.tcp_port))
 				sock.setblocking(0)
 				self.im_connected = True
-				time.sleep(3)
+				
 				#self.omx_controller.rewind()
 				print "* CONECTADO AL MASTER *"
 				
