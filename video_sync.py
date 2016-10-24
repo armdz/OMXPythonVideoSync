@@ -96,7 +96,7 @@ class VideoSync():
 		self.connected_clients = 0
 
 		self.shut_down_timer = False
-		self.shut_down_timer = 0
+		self.shut_down_tick = 0
 
 	def run(self):
 		print 	"**************************************"
@@ -217,8 +217,8 @@ class VideoSync():
 							self.shut_down_tick = time.clock()
 							print "SHUTDOWNO RUTINA ESPERO DOS SEGUNDOS"
 						else:
-							time_dif = math.floor(math.fabs(self.shut_down_tick-time.clock()))
-							print math.floor(math.fabs(self.shut_down_tick-time.clock()))
+							time_dif = math.fabs(self.shut_down_tick-time.clock())
+							print math.fabs(self.shut_down_tick-time.clock())
 							if(time_dif > 2):
 								print "TIEMPO OK"
 								#self.send_shutdown()
