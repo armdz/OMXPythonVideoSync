@@ -6,7 +6,12 @@ import time
 import sys,platform
 import socket
 import atexit
-
+import Queue
+import sys
+import errno
+import math
+import time
+from threading import Thread
 from socket import error as socket_error
 from subprocess import Popen
 from omx_controller import OMXController
@@ -28,6 +33,10 @@ total_clients = 1
 connected_clients = 0
 master_ip = ""
 client_list = []
+ip_list = []
+im_connected = False
+
+shared_q = Queue.Queue()
 
 class VideoSync():
 	def __init__(self):
@@ -38,23 +47,20 @@ class VideoSync():
 			print "* Para SLAVE los argumentos: ",sys.argv[0],"master NUMERO_CLIENTES_A_ESPERAR"
 			print "* Para SLAVE los argumentos: ",sys.argv[0],"slave IP_MASTER"
 			exit()
-
 		if  str(sys.argv[1]) == "master":
 			self.master = True
 			self.total_clients = int(sys.argv[2])
-			self.udp_port = MASTER_INPUT_PORT
+			self.tcp_port = MASTER_INPUT_PORT
+			self.client_list = []
+			self.ip_list = []
+			self.sock = self.init_socket()
 		else:
 			#slave
 			self.master_ip = str(sys.argv[2])	
-			self.udp_port = SLAVE_INPUT_PORT
-
-		self.sock = self.init_socket()
+			self.tcp_port = MASTER_INPUT_PORT
+			self.im_connected = False
+		self.ping_tick = time.clock()
 		self.connected_clients = 0
-	def connect():
-		while True:
-			self.sock.close()
-			try:
-				
 
 	def run(self):
 		print 	"**************************************"
@@ -75,52 +81,68 @@ class VideoSync():
 	def as_slave(self):
 		print "* RUTINA DE CONEXION *"
 		while True:
-			try:
-				#recibo data
-				data,addr = self.sock.recvfrom(1024)
-				if data == "welcome":
-					self.mode = MODE_READY
-					self.omx_controller.ready()
-					print "* ESTOY LISTO *"
-			except socket_error as serr:
-				#no hay data
-				pass
-			if self.mode == SLAVE_SAY_HELLO:
-				self.sock.sendto("hello", (self.master_ip, MASTER_INPUT_PORT))
-				time.sleep(MSG_HELLO_TIMER)
-			if self.mode == MODE_READY:
-				if data == "play":
-					data = ""
-					self.omx_controller.play()
-				elif data == "rewind":
-					data = ""
-					self.omx_controller.rewind()
+			if self.im_connected:
+				try:
+					data,addr = self.sock.recvfrom(1024)
+					if not data:
+						pass
+					else:
+						if data == "play":
+							self.omx_controller.play()
+						elif data == "pause":
+							self.omx_controller.pause()
+						elif data == "rewind":
+							self.omx_controller.rewind()
+				except socket.error, e:
+					pass
+
+			else:
+				self.sock = self.init_socket()
+			time_dif = math.floor(math.fabs(self.ping_tick-time.clock()))
+			if(time_dif > 5):
+				self.ping_tick = time.clock()
+				try:
+					self.sock.send("estoy")
+				except:
+					print "* INTENTO AUTOCONECTAR *"
+					self.sock.close()
+					self.im_connected = False
+
+	def add_input(self,input_queue):
+		while True:
+			input_queue.put(sys.stdin.read(1))
+			pass
 
 	def as_master(self):
+		self.shared_q = Queue.Queue()
+		input_thread = threading.Thread(target=self.add_input, args=(self.shared_q,))
+		input_thread.daemon = True
+		input_thread.start()
+		last_update = time.time()
 		while True:
-			if(self.mode == MODE_READY):
-				try:
-					key_input=raw_input(' > key input :')
-					if key_input == 'p':
-						self.send_play()
-					elif key_input == 'r':
-						self.send_rewind()
-				except ValueError:
-					pass
-			if self.mode == MASTER_MODE_WAITING_CLIENTS:
-				try:
-					data, addr = self.sock.recvfrom(1024)
-					client_list.append(addr)
-					if(data == "hello"):
-						print " * NUEVO CLIENTE",addr
-						self.sock.sendto("welcome", (str(addr[0]), int(addr[1])))
-						self.connected_clients += 1
-						if self.connected_clients == self.total_clients:
-							self.mode = MODE_READY
-							print "* TODOS LOS CUADROS LISTOS *"	
-				except socket_error as serr:
-					#no hay data
-					pass
+			try:
+				client, address = self.sock.accept()
+
+				if address[0] in self.ip_list:
+					ip_index = self.ip_list.index(address[0])
+					self.ip_list.remove(address[0])
+					del self.client_list[ip_index]
+				self.client_list.append(client)
+				self.ip_list.append(address[0])
+				print "* Nueva conexion",address,len(self.client_list),"*"
+			except:
+				pass
+			if not self.shared_q.empty():
+				input_char = self.shared_q.get()
+				if input_char == 's':
+					self.send("play")
+				elif input_char == 'p':
+					self.send("pause")
+				elif input_char == 'r':
+					self.send("rewind")
+
+
+
 	def send_play(self):	
 		print " * ENVIO PLAY *"
 		self.send("play")
@@ -136,21 +158,41 @@ class VideoSync():
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
+		pass
 	#	conexion	#
 	def send(self,msg):
-		for client in client_list:
-			self.sock.sendto(msg, client)
+		for client in self.client_list:
+			try:
+				sent = client.send(msg)
+			except:
+				print "error en cliente"
+				break
 
 	def init_socket(self):
-		sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,0)
-		if self.master:
+		sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		#sock.setblocking(0)
+		"""if self.master:
 			sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-			sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-		sock.bind(('0.0.0.0',self.udp_port))
-		sock.setblocking(0)
+			sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)"""
+		
+		if self.master:
+			print self.tcp_port
+			sock.setblocking(0)
+			sock.bind(('0.0.0.0',self.tcp_port))
+			sock.listen(10)
+		else:
+			try:
+				sock.connect((self.master_ip,self.tcp_port))
+				sock.setblocking(0)
+				self.im_connected = True
+				print "* CONECTADO AL MASTER *"
+			except socket.error,v:
+				self.im_connected = False
+				time.sleep(1)
 		return sock
 
 def exit_handler():
+	pass
 	video_sync.exit()
 
 atexit.register(exit_handler)

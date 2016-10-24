@@ -68,6 +68,7 @@ class OMXController():
 		if im_raspi:
 			self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), long(seconds*1000000))
 	def pause(self):
+		print "* RECIBO PAUSE *"
 		if im_raspi:
 			self.dbusIfaceKey.Pause()
 			#self.dbusIfaceKey.Action(dbus.Int32("16"))
