@@ -83,7 +83,9 @@ class VideoSync():
 			self.tcp_port = MASTER_INPUT_PORT
 			self.im_connected = False
 
-		self.video_file_path = os.path.abspath(sys.argv[0]).replace("video_sync.py",self.video_file_path)
+
+		self.video_file_path = os.path.abspath(sys.argv[0]).replace("video_sync.py",str(sys.argv[3]))
+		print self.video_file_path
 		self.paused_by_button = False
 		self.playing = False
 		self.rewinded = False
