@@ -8,6 +8,7 @@ import socket
 import atexit
 import Queue
 import sys
+import os
 import errno
 import math
 import time
@@ -118,6 +119,8 @@ class VideoSync():
 								self.omx_controller.pause()
 							elif data == "rewind":
 								self.omx_controller.rewind()
+							elif data == "shutdown":
+								os.system("sudo shutdown -h now")
 					except socket.error, e:
 						pass
 					time_dif = math.floor(math.fabs(self.ping_tick-time.clock()))
@@ -189,8 +192,7 @@ class VideoSync():
 					print "Boton",button_pressed
 					if button_pressed == ARRAY_BUTTON_SHUTDOWN:
 						#shut
-						print "CHAU"
-						os.system("sudo shutdown -h now")
+						self.send_shutdown()
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
 						if self.playing:
@@ -225,8 +227,6 @@ class VideoSync():
 				elif input_char == 'r':
 					self.send_rewind()"""
 
-
-
 	def send_play(self):	
 		if not self.playing:
 			print " * ENVIO PLAY *"
@@ -254,7 +254,10 @@ class VideoSync():
 			time.sleep(1)
 			print "mando rewind"
 			self.send_rewind()
-
+	def send_shutdown(self):
+		self.sock.send("shutdown")
+		time.sleep(5)
+		os.system("sudo shutdown -h now")
 		#	duplicar acciones para master
 		#self.omx_controller.rewind()
 	def exit(self):
