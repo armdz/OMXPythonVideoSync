@@ -9,7 +9,6 @@ import math
 # matar proceso pkill omxplayer
 # o killall omxplayer
 
-VIDEO_FILE="video.mov"
 im_raspi = False
 paused = False
 
@@ -32,9 +31,10 @@ class OMXController():
 			print "* OMX INITED *"	
 		else:
 			print "* OMX: NO ESTOY CORRIENDO EN RASPI , SOLO TIRO PRINT :O *"
-	def ready(self):
+	def ready(self,video_file_path):
 		if im_raspi:
-			cmd = "omxplayer --no-osd %s" %(VIDEO_FILE)
+			print "* VIDEO FILE ",video_file_path,"*"
+			cmd = "omxplayer --no-osd %s" %(video_file_path)
 			Popen([cmd], shell=True)
 			done,retry=0,0
 			while done==0:

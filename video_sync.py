@@ -57,10 +57,13 @@ im_connected = False
 rewinded = False
 shared_q = Queue.Queue()
 playing = False
+paused_by_button = False
+video_file_path = ""
 
 class VideoSync():
 	def __init__(self):
 		self.master = False
+		self.video_file_path = ""
 		arg_len = len(sys.argv)
 		if arg_len < 3:
 			print "* Como ejecutar el script ?"
@@ -79,6 +82,9 @@ class VideoSync():
 			self.master_ip = str(sys.argv[2])	
 			self.tcp_port = MASTER_INPUT_PORT
 			self.im_connected = False
+
+		self.video_file_path = os.path.abspath(sys.argv[0]).replace("video_sync.py",self.video_file_path)
+		self.paused_by_button = False
 		self.playing = False
 		self.rewinded = False
 		self.ping_tick = time.clock()
@@ -93,7 +99,7 @@ class VideoSync():
 			print	"Slave"
 		print 	"**************************************"
 		self.omx_controller = OMXController()
-		self.omx_controller.ready()
+		self.omx_controller.ready(self.video_file_path)
 		if self.master:
 			time.sleep(DELAY_INIT_TO_RW)
 			self.omx_controller.rewind()
@@ -198,20 +204,23 @@ class VideoSync():
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
 						if self.playing:
-							print "PAUSA"
+							print "* PAUSA *"
+							self.paused_by_button = True
 							self.send_pause()
 						else:
-							print "PLAY"
+							print "* PLAY *"
+							self.paused_by_button = False
 							self.send_play()
 					elif button_pressed == ARRAY_BUTTON_REWIND:
-						print "REWIND"
+						print "* REWIND *"
 						self.send_rewind()
 
 				sensor_val = GPIO.input(SENSOR_ID)
 				if sensor_val == 1:
-					if not playing:
-						print "SENSOR PLAY"
-						self.send_play()
+					if not self.playing:
+						if not self.paused_by_button:
+							print "* SENSOR PLAY *"
+							self.send_play()
 
 
 			try:
