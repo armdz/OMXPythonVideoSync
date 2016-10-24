@@ -37,6 +37,7 @@ ip_list = []
 im_connected = False
 rewinded = False
 shared_q = Queue.Queue()
+playing = False
 
 class VideoSync():
 	def __init__(self):
@@ -59,7 +60,7 @@ class VideoSync():
 			self.master_ip = str(sys.argv[2])	
 			self.tcp_port = MASTER_INPUT_PORT
 			self.im_connected = False
-			
+		self.playing = False
 		self.rewinded = False
 		self.ping_tick = time.clock()
 		self.connected_clients = 0
@@ -109,7 +110,7 @@ class VideoSync():
 						self.im_connected = False
 			elif self.omx_controller.im_ready:
 				if not self.rewinded:
-					print "reeeewwwww"
+					time.sleep(5)
 					self.omx_controller.rewind()
 					self.rewinded = True
 				else:
@@ -153,17 +154,23 @@ class VideoSync():
 
 
 	def send_play(self):	
-		print " * ENVIO PLAY *"
-		self.send("play")
-		#self.sock.sendto("play", ("255.255.255.255", SLAVE_INPUT_PORT))
-		#	duplicar acciones para master
-		self.omx_controller.play()	
+		if not self.playing:
+			print " * ENVIO PLAY *"
+			self.playing = True
+			self.send("play")
+		#self.omx_controller.play()	
+	def send_pause(self):	
+		if self.playing:
+			print " * ENVIO PAUSE *"
+			self.playing = False
+			self.send("pause")
+		#self.omx_controller.play()	
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
 		self.send("rewind")
-		#self.sock.sendto("rewind", ("255.255.255.255", SLAVE_INPUT_PORT))
+		self.playing = False
 		#	duplicar acciones para master
-		self.omx_controller.rewind()
+		#self.omx_controller.rewind()
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
