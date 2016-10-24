@@ -15,7 +15,6 @@ from threading import Thread
 from socket import error as socket_error
 from subprocess import Popen
 from omx_controller import OMXController
-from dbus import DBusException, Int64, String, ObjectPath
 
 # constantes
 MODE_INIT = -1
@@ -43,9 +42,6 @@ playing = False
 
 class VideoSync():
 	def __init__(self):
-
-		print Int64(1000)
-
 		self.master = False
 		arg_len = len(sys.argv)
 		if arg_len < 3:
