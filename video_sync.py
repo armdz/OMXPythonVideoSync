@@ -218,6 +218,7 @@ class VideoSync():
 							print "SHUTDOWNO RUTINA ESPERO DOS SEGUNDOS"
 						else:
 							time_dif = math.floor(math.fabs(self.shut_down_tick-time.clock()))
+							print math.floor(math.fabs(self.shut_down_tick-time.clock()))
 							if(time_dif > 2):
 								print "TIEMPO OK"
 								#self.send_shutdown()
