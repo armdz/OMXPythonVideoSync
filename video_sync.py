@@ -188,6 +188,7 @@ class VideoSync():
 				sock.connect((self.master_ip,self.tcp_port))
 				sock.setblocking(0)
 				self.im_connected = True
+				self.omx_controller.rewind()
 				print "* CONECTADO AL MASTER *"
 				
 			except socket.error,v:
