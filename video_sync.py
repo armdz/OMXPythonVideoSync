@@ -184,7 +184,7 @@ class VideoSync():
 				if button_pressed != -1:
 					if button_pressed == BUTTON_SHUTDOWN:
 						#shut
-
+						print "hcau"
 					elif button_pressed == BUTTON_PLAY_PAUSE:
 						#play
 						if self.playing:
