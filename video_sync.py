@@ -152,8 +152,7 @@ class VideoSync():
 					self.send_pause()
 				elif input_char == 'r':
 					self.send_rewind()
-
-
+					
 	def send_play(self):	
 		if not self.playing:
 			print " * ENVIO PLAY *"
