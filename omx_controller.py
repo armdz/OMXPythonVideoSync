@@ -13,6 +13,7 @@ VIDEO_FILE="video.mov"
 im_raspi = False
 paused = False
 
+
 if platform.system() == "Linux":
 	import dbus
 	#	si estoy en las raspi hago todo lo que tenga que ver com omx
@@ -22,7 +23,10 @@ if platform.system() == "Linux":
 
 class OMXController():
 
+	im_ready = False
+
 	def __init__(self):
+		
 		if im_raspi:
 			print "* OMX INITED *"	
 		else:
@@ -40,6 +44,7 @@ class OMXController():
 			        self.dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
 			        self.seek(0)
 			        self.dbusIfaceKey.Pause()
+			        self.im_ready = True
 			        print "* OMX CACHEADO *"
 			        done=1
 			    except:

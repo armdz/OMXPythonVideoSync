@@ -98,18 +98,19 @@ class VideoSync():
 							self.omx_controller.rewind()
 				except socket.error, e:
 					pass
-
-			else:
+				time_dif = math.floor(math.fabs(self.ping_tick-time.clock()))
+				if(time_dif > 5):
+					self.ping_tick = time.clock()
+					try:
+						self.sock.send("estoy")
+					except:
+						print "* INTENTO AUTOCONECTAR *"
+						self.sock.close()
+						self.im_connected = False
+			elif self.omx_controller.im_ready:
 				self.sock = self.init_socket()
-			time_dif = math.floor(math.fabs(self.ping_tick-time.clock()))
-			if(time_dif > 5):
-				self.ping_tick = time.clock()
-				try:
-					self.sock.send("estoy")
-				except:
-					print "* INTENTO AUTOCONECTAR *"
-					self.sock.close()
-					self.im_connected = False
+
+			
 
 	def add_input(self,input_queue):
 		while True:
