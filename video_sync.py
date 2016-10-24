@@ -35,7 +35,7 @@ master_ip = ""
 client_list = []
 ip_list = []
 im_connected = False
-
+rewinded = False
 shared_q = Queue.Queue()
 
 class VideoSync():
@@ -108,7 +108,11 @@ class VideoSync():
 						self.sock.close()
 						self.im_connected = False
 			elif self.omx_controller.im_ready:
-				self.sock = self.init_socket()
+				if not rewinded:
+					self.omx_controller.rewind()
+				else:
+					self.sock = self.init_socket()
+
 
 			
 
@@ -189,7 +193,7 @@ class VideoSync():
 				sock.setblocking(0)
 				self.im_connected = True
 				time.sleep(3)
-				self.omx_controller.rewind()
+				#self.omx_controller.rewind()
 				print "* CONECTADO AL MASTER *"
 				
 			except socket.error,v:
