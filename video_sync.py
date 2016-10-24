@@ -16,6 +16,10 @@ from socket import error as socket_error
 from subprocess import Popen
 from omx_controller import OMXController
 
+if platform.system() == "Linux":
+	import RPi.GPIO as GPIO
+
+
 # constantes
 MODE_INIT = -1
 MASTER_MODE_WAITING_CLIENTS = 0
@@ -25,6 +29,18 @@ SLAVE_INPUT_PORT = 12000
 MASTER_INPUT_PORT = 13000
 MSG_HELLO_TIMER = 2	#cada cuando mando el mensaje
 DELAY_INIT_TO_RW = 2
+# botones
+BUTTON_SHUTDOWN = 12
+BUTTON_PLAY_PAUSE = 16
+BUTTON_REWIND = 18
+ARRAY_BUTTON_SHUTDOWN = 0
+ARRAY_BUTTON_PLAY = 1
+ARRAY_BUTTON_REWIND = 2
+val_rew = False
+val_shutdown = False
+val_play_pause = False
+gpio_buttons = []
+gpio_buttons_val = []
 
 im_raspi = False
 master = False
@@ -126,12 +142,47 @@ class VideoSync():
 			pass
 
 	def as_master(self):
+		self.im_raspi = False
+		if platform.system() == "Linux":
+			self.im_raspi = True
+			GPIO.setwarnings(False)
+			GPIO.setmode(GPIO.BOARD)
+			GPIO.setup(BUTTON_SHUTDOWN, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+			GPIO.setup(BUTTON_PLAY_PAUSE, GPIO.IN, pull_up_down = GPIO.PUD_UP) 
+			GPIO.setup(BUTTON_REWIND, GPIO.IN, pull_up_down = GPIO.PUD_UP) 
+
+		self.gpio_buttons = []
+		#	este orden es fundamental
+		self.gpio_buttons.append(BUTTON_SHUTDOWN)
+		self.gpio_buttons.append(BUTTON_PLAY_PAUSE)
+		self.gpio_buttons.append(BUTTON_REWIND)
+		for b in self.gpio_buttons:
+			gpio_buttons_val.append(1)
+
+		self.val_rew = False
+		self.val_shutdown = False
+		self.val_play_pause = False
+
 		self.shared_q = Queue.Queue()
 		input_thread = threading.Thread(target=self.add_input, args=(self.shared_q,))
 		input_thread.daemon = True
-		input_thread.start()
+		#input_thread.start()
 		last_update = time.time()
 		while True:
+
+			#botones
+			if self.im_raspi:
+				button_pressed = -1
+				for i,val in enumerate(self.gpio_buttons):
+					if button_pressed == -1:
+						button_val = GPIO.input(val)
+						if button_val != self.gpio_buttons_val[i]:
+							button_pressed = i
+							self.gpio_buttons_val[i] = button_val
+				if button_pressed != -1:
+					print "presiono",button_pressed
+
+
 			try:
 				client, address = self.sock.accept()
 
@@ -202,7 +253,6 @@ class VideoSync():
 			sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 		
 		if self.master:
-			print self.tcp_port
 			sock.setblocking(0)
 			sock.bind(('0.0.0.0',self.tcp_port))
 			sock.listen(10)
