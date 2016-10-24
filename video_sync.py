@@ -157,7 +157,7 @@ class VideoSync():
 		self.gpio_buttons.append(BUTTON_PLAY_PAUSE)
 		self.gpio_buttons.append(BUTTON_REWIND)
 		for b in self.gpio_buttons:
-			gpio_buttons_val.append(1)
+			self.gpio_buttons_val.append(1)
 
 		self.val_rew = False
 		self.val_shutdown = False
