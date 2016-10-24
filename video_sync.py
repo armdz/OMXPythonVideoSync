@@ -176,6 +176,7 @@ class VideoSync():
 
 				if playing:
 					if self.omx_controller.get_dif() == 0.0:
+						print "video end"
 						self.send_rewind()
 
 				button_pressed = -1
