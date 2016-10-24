@@ -92,9 +92,9 @@ class VideoSync():
 		print 	"**************************************"
 		self.omx_controller = OMXController()
 		self.omx_controller.ready()
-		time.sleep(DELAY_INIT_TO_RW)
-		self.omx_controller.rewind()
 		if self.master:
+			time.sleep(DELAY_INIT_TO_RW)
+			self.omx_controller.rewind()
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
 		else:
