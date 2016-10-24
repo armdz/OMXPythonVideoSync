@@ -155,6 +155,7 @@ class VideoSync():
 			GPIO.setup(BUTTON_SHUTDOWN, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 			GPIO.setup(BUTTON_PLAY_PAUSE, GPIO.IN, pull_up_down = GPIO.PUD_UP) 
 			GPIO.setup(BUTTON_REWIND, GPIO.IN, pull_up_down = GPIO.PUD_UP) 
+			GPIO.setup(SENSOR_ID, GPIO.IN)
 
 		self.gpio_buttons = []
 		self.gpio_buttons_val = []
