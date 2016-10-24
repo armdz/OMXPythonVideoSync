@@ -59,6 +59,9 @@ shared_q = Queue.Queue()
 playing = False
 paused_by_button = False
 video_file_path = ""
+#
+shut_down_timer = False
+shut_down_tick = 0
 
 class VideoSync():
 	def __init__(self):
@@ -85,12 +88,15 @@ class VideoSync():
 
 
 		self.video_file_path = os.path.abspath(sys.argv[0]).replace("video_sync.py",str(sys.argv[3]))
-		print self.video_file_path
+
 		self.paused_by_button = False
 		self.playing = False
 		self.rewinded = False
 		self.ping_tick = time.clock()
 		self.connected_clients = 0
+
+		self.shut_down_timer = False
+		self.shut_down_timer = 0
 
 	def run(self):
 		print 	"**************************************"
@@ -199,10 +205,16 @@ class VideoSync():
 								button_pressed = i
 							self.gpio_buttons_val[i] = button_val
 				if button_pressed != -1:
-					print "Boton",button_pressed
 					if button_pressed == ARRAY_BUTTON_SHUTDOWN:
 						#shut
-						self.send_shutdown()
+						if not self.shut_down_timer:
+							self.shut_down_timer = True
+							self.shut_down_tick = time.clock()
+						else:
+							time_dif = math.floor(math.fabs(self.shut_down_tick-time.clock()))
+							if(time_dif > 2):
+								self.send_shutdown()
+
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
 						if self.playing:
@@ -216,6 +228,8 @@ class VideoSync():
 					elif button_pressed == ARRAY_BUTTON_REWIND:
 						print "* REWIND *"
 						self.send_rewind()
+				else:
+					self.shut_down_timer = False
 
 				sensor_val = GPIO.input(SENSOR_ID)
 				if sensor_val == 1:
