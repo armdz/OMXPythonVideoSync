@@ -110,6 +110,7 @@ class VideoSync():
 			elif self.omx_controller.im_ready:
 				if not rewinded:
 					self.omx_controller.rewind()
+					rewinded = True
 				else:
 					self.sock = self.init_socket()
 
