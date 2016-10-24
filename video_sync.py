@@ -178,7 +178,8 @@ class VideoSync():
 					if button_pressed == -1:
 						button_val = GPIO.input(val)
 						if button_val != self.gpio_buttons_val[i]:
-							button_pressed = i
+							if button_val == 0:
+								button_pressed = i
 							self.gpio_buttons_val[i] = button_val
 				if button_pressed != -1:
 					print "presiono",button_pressed
