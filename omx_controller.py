@@ -56,9 +56,14 @@ class OMXController():
 			            raise SystemExit
 			#incio el video en 0 y con pausa y espero play
 			#self.rewind()
-
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
+	def in_the_end(self):
+
+	def get_position(self):
+		return self.dbusIfaceKey.position()
+	def get_duration(self):
+		return self.dbusIfaceKey.duration()
 	def rewind(self):
 		print "* RECIBO REWIND *"
 		if im_raspi:

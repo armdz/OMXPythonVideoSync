@@ -173,6 +173,9 @@ class VideoSync():
 		while True:
 			#botones
 			if self.im_raspi:
+
+				print self.omx_controller.get_position(),self.omx_controller.get_duration()
+
 				button_pressed = -1
 				for i,val in enumerate(self.gpio_buttons):
 					if button_pressed == -1:
@@ -186,6 +189,7 @@ class VideoSync():
 					if button_pressed == ARRAY_BUTTON_SHUTDOWN:
 						#shut
 						print "CHAU"
+						os.system("sudo shutdown -h now")
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
 						if self.playing:
