@@ -217,10 +217,10 @@ class VideoSync():
 							self.shut_down_tick = time.clock()
 						else:
 							time_dif = math.fabs(self.shut_down_tick-time.clock())
-							print math.fabs(self.shut_down_tick-time.clock())
+							#print math.fabs(self.shut_down_tick-time.clock())
 							if(time_dif > .04):
-								print "TIEMPO OK"
-								#self.send_shutdown()
+								print "TIEMPO SHUTDOWN"
+								self.send_shutdown()
 
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
