@@ -16,6 +16,7 @@ paused = False
 
 if platform.system() == "Linux":
 	import dbus
+	from dbus import DBusException, Int64, String, ObjectPath
 	#	si estoy en las raspi hago todo lo que tenga que ver com omx
 	im_raspi = True
 	OMXPLAYER = 'omxplayer'
