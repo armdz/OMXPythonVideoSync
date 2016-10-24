@@ -183,10 +183,11 @@ class VideoSync():
 								button_pressed = i
 							self.gpio_buttons_val[i] = button_val
 				if button_pressed != -1:
-					if button_pressed == BUTTON_SHUTDOWN:
+					print "Boton",button_pressed
+					if button_pressed == ARRAY_BUTTON_SHUTDOWN:
 						#shut
 						print "CHAU"
-					elif button_pressed == BUTTON_PLAY_PAUSE:
+					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
 						if self.playing:
 							print "PAUSA"
@@ -194,7 +195,7 @@ class VideoSync():
 						else:
 							print "PLAY"
 							self.send_play()
-					elif button_pressed == BUTTON_REWIND:
+					elif button_pressed == ARRAY_BUTTON_REWIND:
 						print "REWIND"
 						self.send_rewind()
 
