@@ -62,9 +62,9 @@ class OMXController():
 		#return math.fabs(self.get_position()-self.get_duration())
 		return self.get_duration()-self.get_position()
 	def get_position(self):
-		return self.dbusIfaceProp.Position()/(1000*1000)
+		return self.dbusIfaceProp.Position()/(1000.0*1000.0)
 	def get_duration(self):
-		return self.dbusIfaceProp.Duration()/(1000*1000)
+		return self.dbusIfaceProp.Duration()/(1000.0*1000.0)
 	def rewind(self):
 		print "* RECIBO REWIND *"
 		if im_raspi:
