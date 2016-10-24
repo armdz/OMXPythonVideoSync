@@ -92,6 +92,8 @@ class VideoSync():
 		print 	"**************************************"
 		self.omx_controller = OMXController()
 		self.omx_controller.ready()
+		time.sleep(DELAY_INIT_TO_RW)
+		self.omx_controller.rewind()
 		if self.master:
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
@@ -170,7 +172,6 @@ class VideoSync():
 		#input_thread.start()
 		last_update = time.time()
 		while True:
-
 			#botones
 			if self.im_raspi:
 				button_pressed = -1
@@ -184,14 +185,17 @@ class VideoSync():
 				if button_pressed != -1:
 					if button_pressed == BUTTON_SHUTDOWN:
 						#shut
-						print "hcau"
+						print "CHAU"
 					elif button_pressed == BUTTON_PLAY_PAUSE:
 						#play
 						if self.playing:
+							print "PAUSA"
 							self.send_pause()
 						else:
+							print "PLAY"
 							self.send_play()
 					elif button_pressed == BUTTON_REWIND:
+						print "REWIND"
 						self.send_rewind()
 
 
