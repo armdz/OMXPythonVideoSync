@@ -24,6 +24,7 @@ MODE_READY = 3
 SLAVE_INPUT_PORT = 12000
 MASTER_INPUT_PORT = 13000
 MSG_HELLO_TIMER = 2	#cada cuando mando el mensaje
+DELAY_INIT_TO_RW = 2
 
 im_raspi = False
 master = False
@@ -110,7 +111,7 @@ class VideoSync():
 						self.im_connected = False
 			elif self.omx_controller.im_ready:
 				if not self.rewinded:
-					time.sleep(5)
+					time.sleep(DELAY_INIT_TO_RW)
 					self.omx_controller.rewind()
 					self.rewinded = True
 				else:
@@ -167,8 +168,15 @@ class VideoSync():
 		#self.omx_controller.play()	
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
-		self.send("rewind")
-		self.playing = False
+		if self.playing:
+			self.send("rewind")
+			self.playing = False
+		else:
+			self.playing = True
+			self.send("play")
+			time.sleep(2)
+			send_rewind(self)
+
 		#	duplicar acciones para master
 		#self.omx_controller.rewind()
 	def exit(self):
