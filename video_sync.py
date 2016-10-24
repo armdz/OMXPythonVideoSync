@@ -60,7 +60,7 @@ class VideoSync():
 			self.tcp_port = MASTER_INPUT_PORT
 			self.im_connected = False
 			
-
+		self.rewinded = False
 		self.ping_tick = time.clock()
 		self.connected_clients = 0
 
