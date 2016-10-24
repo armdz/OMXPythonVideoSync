@@ -59,7 +59,8 @@ class OMXController():
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def get_dif(self):
-		return math.fabs(self.get_position()-self.get_duration())
+		#return math.fabs(self.get_position()-self.get_duration())
+		return self.get_duration()-self.get_position()
 	def get_position(self):
 		return self.dbusIfaceProp.Position()/(1000*1000)
 	def get_duration(self):

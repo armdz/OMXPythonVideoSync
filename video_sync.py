@@ -174,11 +174,9 @@ class VideoSync():
 			#botones
 			if self.im_raspi:
 
-				print self.omx_controller.get_dif()
+				#print self.omx_controller.get_dif()
 				if self.omx_controller.get_dif() == 1.0:
-					print "video end"
 					self.send_rewind()
-
 				button_pressed = -1
 				for i,val in enumerate(self.gpio_buttons):
 					if button_pressed == -1:
