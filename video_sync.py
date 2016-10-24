@@ -91,7 +91,7 @@ class VideoSync():
 			print	"Slave"
 		print 	"**************************************"
 		self.omx_controller = OMXController()
-		#self.omx_controller.ready()
+		self.omx_controller.ready()
 		if self.master:
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
@@ -223,22 +223,24 @@ class VideoSync():
 			print " * ENVIO PLAY *"
 			self.playing = True
 			self.send("play")
-		#self.omx_controller.play()	
+			self.omx_controller.play()	
 	def send_pause(self):	
 		if self.playing:
 			print " * ENVIO PAUSE *"
 			self.playing = False
 			self.send("pause")
-		#self.omx_controller.play()	
+			self.omx_controller.pause()	
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
 		if self.playing:
 			self.send("rewind")
+			self.omx_controller.rewind()	
 			self.playing = False
 		else:
 			print "mando play"
 			self.playing = True
 			self.send("play")
+			self.omx_controller.play()	
 			print "espero"
 			time.sleep(1)
 			print "mando rewind"
