@@ -200,20 +200,27 @@ class VideoSync():
 				for i,val in enumerate(self.gpio_buttons):
 					if button_pressed == -1:
 						button_val = GPIO.input(val)
-						if button_val != self.gpio_buttons_val[i]:
+						if i == ARRAY_BUTTON_SHUTDOWN:
 							if button_val == 0:
 								button_pressed = i
-							self.gpio_buttons_val[i] = button_val
+								self.gpio_buttons_val[i] = button_val
+						else:
+							if button_val != self.gpio_buttons_val[i]:
+								if button_val == 0:
+									button_pressed = i
+								self.gpio_buttons_val[i] = button_val
 				if button_pressed != -1:
 					if button_pressed == ARRAY_BUTTON_SHUTDOWN:
 						#shut
 						if not self.shut_down_timer:
 							self.shut_down_timer = True
 							self.shut_down_tick = time.clock()
+							print "SHUTDOWNO RUTINA ESPERO DOS SEGUNDOS"
 						else:
 							time_dif = math.floor(math.fabs(self.shut_down_tick-time.clock()))
 							if(time_dif > 2):
-								self.send_shutdown()
+								print "TIEMPO OK"
+								#self.send_shutdown()
 
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
