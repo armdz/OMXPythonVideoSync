@@ -91,7 +91,7 @@ class VideoSync():
 			print	"Slave"
 		print 	"**************************************"
 		self.omx_controller = OMXController()
-		self.omx_controller.ready()
+		#self.omx_controller.ready()
 		if self.master:
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
@@ -152,6 +152,7 @@ class VideoSync():
 			GPIO.setup(BUTTON_REWIND, GPIO.IN, pull_up_down = GPIO.PUD_UP) 
 
 		self.gpio_buttons = []
+		self.gpio_buttons_val = []
 		#	este orden es fundamental
 		self.gpio_buttons.append(BUTTON_SHUTDOWN)
 		self.gpio_buttons.append(BUTTON_PLAY_PAUSE)
