@@ -175,7 +175,7 @@ class VideoSync():
 			self.playing = True
 			self.send("play")
 			time.sleep(2)
-			send_rewind(self)
+			self.send_rewind()
 
 		#	duplicar acciones para master
 		#self.omx_controller.rewind()
