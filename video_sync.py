@@ -37,6 +37,7 @@ BUTTON_REWIND = 18
 ARRAY_BUTTON_SHUTDOWN = 0
 ARRAY_BUTTON_PLAY = 1
 ARRAY_BUTTON_REWIND = 2
+SENSOR_ID = 11
 val_rew = False
 val_shutdown = False
 val_play_pause = False
@@ -204,6 +205,12 @@ class VideoSync():
 					elif button_pressed == ARRAY_BUTTON_REWIND:
 						print "REWIND"
 						self.send_rewind()
+
+				sensor_val = GPIO.input(SENSOR_ID)
+				if sensor_val == 1:
+					if not playing:
+						print "SENSOR PLAY"
+						self.send_play()
 
 
 			try:
