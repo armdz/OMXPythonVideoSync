@@ -255,7 +255,7 @@ class VideoSync():
 			print "mando rewind"
 			self.send_rewind()
 	def send_shutdown(self):
-		self.sock.send("shutdown")
+		self.send("shutdown")
 		time.sleep(5)
 		os.system("sudo shutdown -h now")
 		#	duplicar acciones para master
