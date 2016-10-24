@@ -111,6 +111,7 @@ class VideoSync():
 						if not data:
 							pass
 						else:
+							print "RECIBO DATA",data
 							if data == "play":
 								self.omx_controller.play()
 							elif data == "pause":
@@ -135,9 +136,6 @@ class VideoSync():
 					self.rewinded = True
 				else:
 					self.sock = self.init_socket()
-
-
-			
 
 	def add_input(self,input_queue):
 		while True:
