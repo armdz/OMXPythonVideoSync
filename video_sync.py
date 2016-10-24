@@ -147,11 +147,11 @@ class VideoSync():
 			if not self.shared_q.empty():
 				input_char = self.shared_q.get()
 				if input_char == 's':
-					self.send("play")
+					self.send_play()
 				elif input_char == 'p':
-					self.send("pause")
+					self.send_pause()
 				elif input_char == 'r':
-					self.send("rewind")
+					self.send_rewind()
 
 
 	def send_play(self):	
@@ -172,9 +172,12 @@ class VideoSync():
 			self.send("rewind")
 			self.playing = False
 		else:
+			print "mando play"
 			self.playing = True
 			self.send("play")
-			time.sleep(2)
+			print "espero"
+			time.sleep(1)
+			print "mando rewind"
 			self.send_rewind()
 
 		#	duplicar acciones para master
