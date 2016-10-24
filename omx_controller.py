@@ -59,11 +59,11 @@ class OMXController():
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
 	def in_the_end(self):
-
+		pass
 	def get_position(self):
-		return self.dbusIfaceKey.position()
+		return self.dbusIfaceProp.Position()
 	def get_duration(self):
-		return self.dbusIfaceKey.duration()
+		return self.dbusIfaceProp.Duration()
 	def rewind(self):
 		print "* RECIBO REWIND *"
 		if im_raspi:
