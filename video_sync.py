@@ -174,8 +174,9 @@ class VideoSync():
 			#botones
 			if self.im_raspi:
 
-				if self.omx_controller.get_dif() == 0.0:
-					self.send_rewind()
+				if playing:
+					if self.omx_controller.get_dif() == 0.0:
+						self.send_rewind()
 
 				button_pressed = -1
 				for i,val in enumerate(self.gpio_buttons):
