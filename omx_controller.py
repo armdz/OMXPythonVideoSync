@@ -42,8 +42,7 @@ class OMXController():
 			        object = self.bus.get_object('org.mpris.MediaPlayer2.omxplayer','/org/mpris/MediaPlayer2', introspect=False)
 			        self.dbusIfaceProp = dbus.Interface(object,'org.freedesktop.DBus.Properties')
 			        self.dbusIfaceKey = dbus.Interface(object,'org.mpris.MediaPlayer2.Player')
-			        self.seek(0)
-			        self.dbusIfaceKey.Pause()
+			        #self.dbusIfaceKey.Pause()
 			        self.im_ready = True
 			        print "* OMX CACHEADO *"
 			        done=1
