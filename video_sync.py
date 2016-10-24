@@ -59,6 +59,8 @@ class VideoSync():
 			self.master_ip = str(sys.argv[2])	
 			self.tcp_port = MASTER_INPUT_PORT
 			self.im_connected = False
+			self.omx_controller.ready()
+
 		self.ping_tick = time.clock()
 		self.connected_clients = 0
 
@@ -185,8 +187,7 @@ class VideoSync():
 				sock.setblocking(0)
 				self.im_connected = True
 				print "* CONECTADO AL MASTER *"
-				self.omx_controller.ready()
-				print "* ESTOY LISTO *"
+				
 			except socket.error,v:
 				self.im_connected = False
 				time.sleep(1)
