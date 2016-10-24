@@ -4,7 +4,7 @@ import time
 import os
 import signal
 from subprocess import Popen
-
+import math
 # matar socket fuser -k -n tcp 37
 # matar proceso pkill omxplayer
 # o killall omxplayer
@@ -70,7 +70,7 @@ class OMXController():
 			self.dbusIfaceKey.Action(dbus.Int32("16"))
 	def seek(self,seconds):
 		if im_raspi:
-			self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), 0.0)
+			self.dbusIfaceKey.SetPosition(dbus.ObjectPath('/not/used'), Int64(seconds*1000*1000))
 	def pause(self):
 		print "* RECIBO PAUSE *"
 		if im_raspi:
