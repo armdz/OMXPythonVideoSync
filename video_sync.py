@@ -327,7 +327,6 @@ class VideoSync():
 	def exit(self):
 		self.sock.close()
 		self.omx_controller.kill()
-		pass
 	#	conexion	#
 	def send(self,msg):
 		for client in self.client_list:
@@ -363,7 +362,6 @@ class VideoSync():
 		return sock
 
 def exit_handler():
-	self.sock.close()
 	video_sync.exit()
 
 atexit.register(exit_handler)
