@@ -58,7 +58,8 @@ class OMXController():
 			#self.rewind()
 		else:
 			print "* OMX: READY, ESPERANDO PLAY *"
-
+	def playing(self):
+		return self.dbusIfaceProp.PlaybackStatus() == "Playing"
 	def status(self):
 		return self.dbusIfaceProp.PlaybackStatus()
 	def get_dif(self):

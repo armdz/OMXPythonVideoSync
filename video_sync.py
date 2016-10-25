@@ -197,7 +197,7 @@ class VideoSync():
 			#botones
 			if self.im_raspi and self.master_ready_to_operate:
 
-				print self.omx_controller.status()
+
 
 				#print self.omx_controller.get_dif()
 				if self.omx_controller.get_dif() <= 0.5:
@@ -235,7 +235,7 @@ class VideoSync():
 							print "* EXIIIT *"
 							exit()
 						else:
-							if self.playing:
+							if self.omx_controller.playing:
 								print "* PAUSA *"
 								self.paused_by_button = True
 								self.send_pause()
@@ -256,7 +256,7 @@ class VideoSync():
 
 				sensor_val = GPIO.input(SENSOR_ID)
 				if sensor_val == 1:
-					if not self.playing:
+					if not self.omx_controller.playing:
 						if not self.paused_by_button:
 							print "* SENSOR PLAY *"
 							self.send_play()
@@ -297,13 +297,13 @@ class VideoSync():
 					self.send_rewind()"""
 
 	def send_play(self):	
-		if not self.playing:
+		if not self.omx_controller.playing:
 			print " * ENVIO PLAY *"
 			self.playing = True
 			self.send("play")
 			self.omx_controller.play()	
 	def send_pause(self):	
-		if self.playing:
+		if self.omx_controller.playing:
 			print " * ENVIO PAUSE *"
 			self.playing = False
 			self.send("pause")
@@ -312,7 +312,7 @@ class VideoSync():
 		pass
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
-		if self.playing:
+		if self.omx_controller.playing:
 			self.send("rewind")
 			self.omx_controller.rewind()	
 			self.playing = False
