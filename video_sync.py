@@ -280,7 +280,8 @@ class VideoSync():
 					time.sleep(2)
 					self.omx_controller.ready(self.video_file_path)
 					time.sleep(2)
-					self.send_rewind()
+					self.omx_controller.rewind()
+					#self.send_rewind()
 					# ACA INICIO EL OMX EN EL MASTER
 				
 			except:
