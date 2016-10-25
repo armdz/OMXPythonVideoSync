@@ -235,7 +235,7 @@ class VideoSync():
 							print "* EXIIIT *"
 							exit()
 						else:
-							if self.omx_controller.playing:
+							if self.playing:
 								print "* PAUSA *"
 								self.paused_by_button = True
 								self.send_pause()
@@ -256,7 +256,7 @@ class VideoSync():
 
 				sensor_val = GPIO.input(SENSOR_ID)
 				if sensor_val == 1:
-					if not self.omx_controller.playing:
+					if not self.playing:
 						if not self.paused_by_button:
 							print "* SENSOR PLAY *"
 							self.send_play()
@@ -279,7 +279,6 @@ class VideoSync():
 					self.master_ready_to_operate = True
 					time.sleep(2)
 					self.omx_controller.ready(self.video_file_path)
-					
 					time.sleep(2)
 					self.send_rewind()
 					# ACA INICIO EL OMX EN EL MASTER
@@ -296,13 +295,13 @@ class VideoSync():
 					self.send_rewind()"""
 
 	def send_play(self):	
-		if not self.omx_controller.playing:
+		if not self.playing:
 			print " * ENVIO PLAY *"
 			self.playing = True
 			self.send("play")
 			self.omx_controller.play()	
 	def send_pause(self):	
-		if self.omx_controller.playing:
+		if self.playing:
 			print " * ENVIO PAUSE *"
 			self.playing = False
 			self.send("pause")
@@ -311,7 +310,7 @@ class VideoSync():
 		pass
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
-		if self.omx_controller.playing:
+		if self.playing:
 			self.send("rewind")
 			self.omx_controller.rewind()	
 			self.playing = False
