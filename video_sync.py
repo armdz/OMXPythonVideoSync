@@ -238,6 +238,9 @@ class VideoSync():
 					elif button_pressed == ARRAY_BUTTON_REWIND:
 						print "* REWIND *"
 						self.send_rewind()
+						if GPIO.input(BUTTON_PLAY_PAUSE) == 0:
+							exit()
+
 				else:
 					self.shut_down_timer = False
 
@@ -351,7 +354,7 @@ class VideoSync():
 		return sock
 
 def exit_handler():
-	pass
+	self.sock.close()
 	video_sync.exit()
 
 atexit.register(exit_handler)
