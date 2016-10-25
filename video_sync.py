@@ -325,8 +325,10 @@ class VideoSync():
 		#	duplicar acciones para master
 		#self.omx_controller.rewind()
 	def exit(self):
-		self.sock.close()
 		self.omx_controller.kill()
+		self.sock.close()
+		os.system("fuser -k -n tcp 13000")
+		sys.exit(0)
 	#	conexion	#
 	def send(self,msg):
 		for client in self.client_list:
