@@ -196,6 +196,9 @@ class VideoSync():
 		while True:
 			#botones
 			if self.im_raspi and self.master_ready_to_operate:
+
+				print self.omx_controller.status()
+
 				#print self.omx_controller.get_dif()
 				if self.omx_controller.get_dif() <= 0.5:
 					self.send_rewind()
@@ -305,6 +308,8 @@ class VideoSync():
 			self.playing = False
 			self.send("pause")
 			self.omx_controller.pause()	
+	def force_rewind(self):
+		pass
 	def send_rewind(self):
 		print " * ENVIO REWIND *"
 		if self.playing:
