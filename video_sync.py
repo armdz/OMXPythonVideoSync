@@ -113,7 +113,7 @@ class VideoSync():
 		
 		if self.master:
 			time.sleep(DELAY_INIT_TO_RW)
-			self.omx_controller.rewind()
+			#self.omx_controller.rewind()
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
 		else:
@@ -188,9 +188,9 @@ class VideoSync():
 		self.val_shutdown = False
 		self.val_play_pause = False
 
-		self.shared_q = Queue.Queue()
-		input_thread = threading.Thread(target=self.add_input, args=(self.shared_q,))
-		input_thread.daemon = True
+		#self.shared_q = Queue.Queue()
+		#input_thread = threading.Thread(target=self.add_input, args=(self.shared_q,))
+		#input_thread.daemon = True
 		#input_thread.start()
 		last_update = time.time()
 		while True:
@@ -269,6 +269,8 @@ class VideoSync():
 					self.master_ready_to_operate = True
 					time.sleep(2)
 					self.omx_controller.ready(self.video_file_path)
+					time.sleep(2)
+					self.omx_controller.rewind()
 					# ACA INICIO EL OMX EN EL MASTER
 				
 			except:
