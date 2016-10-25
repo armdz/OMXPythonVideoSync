@@ -59,6 +59,7 @@ shared_q = Queue.Queue()
 playing = False
 paused_by_button = False
 video_file_path = ""
+master_ready_to_operate = False
 #
 shut_down_timer = False
 shut_down_tick = 0
@@ -75,11 +76,13 @@ class VideoSync():
 			exit()
 		if  str(sys.argv[1]) == "master":
 			self.master = True
+			self.connected_clients = 0
 			self.total_clients = int(sys.argv[2])
 			self.tcp_port = MASTER_INPUT_PORT
 			self.client_list = []
 			self.ip_list = []
 			self.sock = self.init_socket()
+			self.master_ready_to_operate = False
 		else:
 			#slave
 			self.master_ip = str(sys.argv[2])	
@@ -107,13 +110,14 @@ class VideoSync():
 			print	"Slave"
 		print 	"**************************************"
 		self.omx_controller = OMXController()
-		self.omx_controller.ready(self.video_file_path)
+		
 		if self.master:
 			time.sleep(DELAY_INIT_TO_RW)
 			self.omx_controller.rewind()
 			self.mode = MASTER_MODE_WAITING_CLIENTS
 			self.as_master()
 		else:
+			self.omx_controller.ready(self.video_file_path)
 			self.mode = SLAVE_SAY_HELLO
 			self.as_slave()
 
@@ -191,8 +195,7 @@ class VideoSync():
 		last_update = time.time()
 		while True:
 			#botones
-			if self.im_raspi:
-
+			if self.im_raspi and self.master_ready_to_operate:
 				#print self.omx_controller.get_dif()
 				if self.omx_controller.get_dif() <= 0.5:
 					self.send_rewind()
@@ -252,10 +255,19 @@ class VideoSync():
 				if address[0] in self.ip_list:
 					ip_index = self.ip_list.index(address[0])
 					self.ip_list.remove(address[0])
+					self.connected_clients-=1
 					del self.client_list[ip_index]
 				self.client_list.append(client)
-				self.ip_list.append(address[0])
 				print "* Nueva conexion",address,len(self.client_list),"*"
+				self.ip_list.append(address[0])
+				self.connected_clients+=1
+				if self.connected_clients >= self.total_clients:
+					print "* CLIENTES CONECTADOS LISTO PARA OPERAR *"
+					self.master_ready_to_operate = True
+					time.sleep(2)
+					self.omx_controller.ready(self.video_file_path)
+					# ACA INICIO EL OMX EN EL MASTER
+				
 			except:
 				pass
 			"""if not self.shared_q.empty():
