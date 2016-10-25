@@ -227,19 +227,26 @@ class VideoSync():
 
 					elif button_pressed == ARRAY_BUTTON_PLAY:
 						#play
-						if self.playing:
-							print "* PAUSA *"
-							self.paused_by_button = True
-							self.send_pause()
-						else:
-							print "* PLAY *"
-							self.paused_by_button = False
-							self.send_play()
-					elif button_pressed == ARRAY_BUTTON_REWIND:
-						print "* REWIND *"
-						self.send_rewind()
-						if GPIO.input(BUTTON_PLAY_PAUSE) == 0:
+
+						if GPIO.input(BUTTON_REWIND) == 0:
+							print "* EXIIIT *"
 							exit()
+						else:
+							if self.playing:
+								print "* PAUSA *"
+								self.paused_by_button = True
+								self.send_pause()
+							else:
+								print "* PLAY *"
+								self.paused_by_button = False
+								self.send_play()
+					elif button_pressed == ARRAY_BUTTON_REWIND:
+						if GPIO.input(BUTTON_PLAY_PAUSE) == 0:
+							print "* EXIIIT *"
+							exit()
+						else:
+							print "* REWIND *"
+							self.send_rewind()
 
 				else:
 					self.shut_down_timer = False
