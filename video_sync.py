@@ -269,7 +269,7 @@ class VideoSync():
 					if not self.playing:
 						if not self.paused_by_button:
 							print "* SENSOR PLAY *"
-							self.send_play()
+							#self.send_play()
 
 
 			try:
