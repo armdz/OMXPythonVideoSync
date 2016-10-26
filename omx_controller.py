@@ -72,8 +72,10 @@ class OMXController():
 	def rewind(self):
 		print "* RECIBO REWIND *"
 		if im_raspi:
-			self.pause()
+
 			self.seek(0.0)
+			time.sleep(.1)
+			self.pause()
 			#time.sleep(.4)
 			
 	def play(self):
