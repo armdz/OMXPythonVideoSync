@@ -192,7 +192,7 @@ class VideoSync():
 		time.sleep(2)
 		self.omx_controller.ready(self.video_file_path)
 		self.omx_controller.rewind()
-		self.omx_controller.pause()
+		#self.omx_controller.pause()
 
 		#BORRRAR ESTO
 
