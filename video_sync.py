@@ -188,10 +188,10 @@ class VideoSync():
 		self.val_shutdown = False
 		self.val_play_pause = False
 
-		self.master_ready_to_operate = True
+		"""self.master_ready_to_operate = True
 		time.sleep(2)
 		self.omx_controller.ready(self.video_file_path)
-		self.omx_controller.rewind()
+		self.omx_controller.rewind()"""
 		#self.omx_controller.pause()
 
 		#BORRRAR ESTO
@@ -269,7 +269,7 @@ class VideoSync():
 					if not self.playing:
 						if not self.paused_by_button:
 							print "* SENSOR PLAY *"
-							#self.send_play()
+							self.send_play()
 
 
 			try:
@@ -289,10 +289,10 @@ class VideoSync():
 					self.master_ready_to_operate = True
 					time.sleep(2)
 					self.omx_controller.ready(self.video_file_path)
-					self.omx_controller.pause()
+					#self.omx_controller.pause()
 					#time.sleep(2)
-					#self.omx_controller.rewind()
-					#self.send_rewind()
+					self.omx_controller.rewind()
+					self.send_rewind()
 					# ACA INICIO EL OMX EN EL MASTER
 				
 			except:
