@@ -34,7 +34,7 @@ class OMXController():
 	def ready(self,video_file_path):
 		if im_raspi:
 			print "* VIDEO FILE ",video_file_path,"*"
-			cmd = "omxplayer --no-osd %s" %(video_file_path)
+			cmd = "omxplayer --no-osd -o local %s" %(video_file_path)
 			Popen([cmd], shell=True)
 			done,retry=0,0
 			while done==0:
