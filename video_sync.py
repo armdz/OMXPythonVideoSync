@@ -188,6 +188,15 @@ class VideoSync():
 		self.val_shutdown = False
 		self.val_play_pause = False
 
+		self.master_ready_to_operate = True
+		time.sleep(2)
+		self.omx_controller.ready(self.video_file_path)
+		self.omx_controller.pause()
+
+		#BORRRAR ESTO
+
+
+
 		#self.shared_q = Queue.Queue()
 		#input_thread = threading.Thread(target=self.add_input, args=(self.shared_q,))
 		#input_thread.daemon = True
